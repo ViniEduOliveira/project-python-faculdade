@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 
-
+#Arquivos json em variáveis
 ARQUIVO_TAREFAS = 'tarefas.json'
 ARQUIVO_HISTORICO = 'tarefas_arquivadas.json'
 
