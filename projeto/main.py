@@ -7,6 +7,7 @@ from datetime import datetime
 ARQUIVO_TAREFAS = 'tarefas.json'
 ARQUIVO_HISTORICO = 'tarefas_arquivadas.json'
 
+#Definir o tamanho das tabelas dentro do terminal 
 SEP = " | " 
 W_IDX = 5
 W_COD = 5
@@ -18,26 +19,70 @@ W_ORI = 15
 W_DATA = 20
 W_TEMPO = 20
 
+#Somar para saber o tamanho total
 LARGURA_TOTAL = (W_IDX + W_COD + W_TIT + W_DESC + W_PRI + W_STAT + W_ORI + W_DATA + W_TEMPO + (8 * len(SEP)))
 
+def limparTela():
+    """
+    Limpa a tela do console (terminal)
+    Verifica se o SO é Windows ('nt') ou Linux/macOS
+    
+    Parâmetros: 
+        Nenhum
+    Retorno: 
+        Nenhum
+    """
 
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
 
 def pausar():
+    """
+    Pausa o programa, aguarda o usuário pressionar Enter
+    e depois limpa a tela
+    
+    Parâmetros: 
+        Nenhum
+    Retorno: 
+        Nenhum
+    """
+
     input("\nAperter Enter para continuar...")
-    os.system('cls')
+    limparTela()
 
 def cabecalho():
+    """
+    Imprime o cabeçalho visual padronizado do programa
+    
+    Parâmetros: 
+        Nenhum
+    Retorno: 
+        Nenhum
+    """
+
     print()
     titulo = "Gerenciamento da Tarefa Pessoal"
     print("-" * LARGURA_TOTAL)
     print(f"{titulo.center(LARGURA_TOTAL, ' ')}")
     print("-" * LARGURA_TOTAL)
-    
-    return
 
 
 
 def carregar_dados(arquivo):
+    """
+    Carrega os dados de um arquivo JSON
+    Se o arquivo não existir, ele o cria com uma lista vazia
+    Também trata arquivos vazios ou corrompidos
+    
+    Parâmetros:
+        arquivo (str): O nome do arquivo JSON para carregar
+    
+    Retorno:
+        list: A lista de dados (tarefas) carregada, ou uma lista vazia se houver erro
+    """
+
     print(f"Executando a função carregar_dados para {arquivo}")
     if not os.path.exists(arquivo):
         print(f"Arquivo {arquivo} não encontrado. Criando um novo...")
@@ -59,6 +104,17 @@ def carregar_dados(arquivo):
         return []
 
 def salvar_dados(arquivo, dados):
+    """
+    Salva a lista de dados (tarefas) em um arquivo JSON
+    
+    Parâmetros:
+        arquivo (str): O nome do arquivo JSON onde salvar os dados
+        dados (list): A lista de dados (tarefas) a ser salva
+    
+    Retorno:
+        Nenhum
+    """
+
     print(f"Executando a função salvar_dados para {arquivo}")
     try:
         with open(arquivo, 'w', encoding='utf-8') as f:
@@ -69,10 +125,19 @@ def salvar_dados(arquivo, dados):
 
 
 def cadastro():
-    '''
-    Funcão de cadastro - Será pedido todas as informações 
-    da tarefa para cadastra-las. Todas usam while, try/except
-    '''
+    """
+    Coleta dados da tarefa do usuário como: (código, titulo,
+    descrição, prioridade, status, origem e data). Além disso 
+    usamos funções para gerar o código e ver se o nome
+    está correto
+    
+    Parâmetros:
+        Nenhum
+    
+    Retorno:
+        Nenhum
+    """
+
     cabecalho()
     print("Executando função - Cadastro\n")
     global tarefas
@@ -81,6 +146,7 @@ def cadastro():
     codigo = gerarCod()
     pausar()
     cabecalho()
+    print("Executando função - Cadastro\n")
     titulo = verificarTarefa()
     print(f"Código da tarefa '{titulo.title()}': {codigo}")
     pausar()
@@ -112,7 +178,7 @@ def cadastro():
             print(e)
             pausar()
             continue
-    os.system('cls')
+    pausar()
 
     status = "PENDENTE"
 
@@ -157,11 +223,20 @@ def cadastro():
     return
 
 def tabelaVisualizar():
-  
-    '''
-    Tabela onde mostra as tarefas (sem a Descrição)
-    para garantir que caiba na tela.
-    '''
+    """
+    Exibe o relatório principal de tarefas ativas (da lista global 'tarefas')
+    As tarefas são ordenadas por prioridade
+    
+    Para tarefas com status 'CONCLUÍDA', chama a função 'calcularTempo' 
+    para exibir o tempo total de execução
+    
+    Parâmetros:
+        Nenhum
+        
+    Retorno:
+        Nenhum
+    """
+
     cabecalho()
     print("Executando função - Relatório\n")
     if not tarefas:
@@ -221,10 +296,20 @@ def tabelaVisualizar():
     print("-" * LARGURA_TOTAL)
 
 def atualizar():
-    '''
-    De acordo com o código que o usuário digitar, vai ser possível 
-    editar o nível de prioridade caso o código da tarefa esteja correto
-    '''
+    """
+    Permite o usuário selecionar uma tarefa pelo código e
+    alterar seu nível de prioridade 
+    
+    A função busca na lista global 'tarefas' pelo código informado
+    Se encontrar, solicita a nova prioridade e valida a entrada
+    
+    Parâmetros:
+        Nenhum
+        
+    Retorno:
+        Nenhum
+    """
+
     global tarefas
     cabecalho()
     print("Executando função - Atualizar tarefa\n")
@@ -259,12 +344,24 @@ def atualizar():
         print("Tarefa não encontrada")
     
 def verificarUrgencia():
-    '''
-    A função vai verificar se tem tarefas, depois se já não tem
-    uma em andamento e caso não seja nenhuma dessas opções, ele vai
-    pegar a tarefa que está com a prioridade mais alta e colocar ela 
-    para fazer
-    '''
+    """
+    Verifica a tarefa pendente de maior prioridade
+    
+    Primeiro, checa se já existe alguma tarefa com status "FAZENDO"
+    Se não houver, procura a primeira tarefa "PENDENTE" seguindo a
+    ordem de prioridade (URGENTE > ALTA > MÉDIA > BAIXA)
+    
+    Se encontrar uma, atualiza seu status para "FAZENDO"
+    
+    Parâmetros:
+        Nenhum
+        
+    Retorno:
+        A tarefa que foi colocada em andamento (status atualizado)
+        Se nenhuma tarefa foi iniciada (ou por já ter uma "FAZENDO"
+              ou por não haver tarefas pendentes)
+    """
+
     cabecalho()
     print("Executando função - Verificar urgencia da tarefa\n")
     if not tarefas:
@@ -290,10 +387,20 @@ def verificarUrgencia():
         return None
 
 def concluir():
-    '''
-    Para concluir uma tarefa, o usuário coloca o código da tarefa que ele
-    quer concluir 
-    '''
+    """
+    Permite ao usuário selecionar uma tarefa pelo código
+    e marcá-la como "CONCLUÍDA" 
+    
+    A função registra a data e hora exatas da conclusão
+    no campo 'dataConclusao' da tarefa.
+    
+    Parâmetros:
+        Nenhum
+        
+    Retorno:
+        Nenhum
+    """
+
     global tarefas
     cabecalho()
     print("Executando função - Concluir tarefa\n")
@@ -309,6 +416,20 @@ def concluir():
         print("Tarefa não encontrada")
 
 def excluirTarefa():
+    """
+    Realiza a "exclusão lógica" de uma tarefa
+    
+    A função encontra a tarefa pelo código e altera seu status
+    para "EXCLUÍDA". A tarefa não é removida da lista 'tarefas'
+    imediatamente, ela será movida para o histórico pela função 'arquivamento'.
+    
+    Parâmetros:
+        Nenhum
+        
+    Retorno:
+        Nenhum
+    """
+
     print("Executando função - Excluir tarefa\n")
     global tarefas
 
@@ -329,6 +450,21 @@ def excluirTarefa():
         print("Tarefa não encontrada")
 
 def arquivamento():
+    """    
+    Verifica a lista global 'tarefas' e move tarefas para a lista
+    global 'tarefasArquivadas' se:
+    1. O status for "EXCLUÍDA" 
+    2. O status for "CONCLUÍDA" há mais de 7 dias 
+    
+    Ao final, salva ambos os arquivos JSON (tarefas e histórico).
+    
+    Parâmetros:
+        Nenhum
+        
+    Retorno:
+        Nenhum
+    """
+
     print("Executando função - Limpar e Arquivar tarefas\n")
     global tarefas
     global tarefasArquivadas
@@ -373,10 +509,16 @@ def arquivamento():
 
 def relatorioArquivamento():
     """
-    Exibe todas as tarefas do arquivo de histórico
-    que NÃO estejam com o status 'EXCLUÍDA', usando
-    o layout global da tabela.
+    Exibe um relatório de todas as tarefas do histórico ('tarefasArquivadas'),
+    EXCETO aquelas com status "EXCLUÍDA"
+    
+    Parâmetros:
+        Nenhum
+        
+    Retorno:
+        Nenhum
     """
+
     cabecalho()
     print("Executando função - Relatório de Arquivadas\n")
 
@@ -434,19 +576,37 @@ def relatorioArquivamento():
 
 
 def gerarCod():
-    '''
-        Cada tarefa terá o seu código que será calculado 
-        pelo contador e convetido para ter 3 caracters
-    '''
+    """
+    Gera um novo código de tarefa único
+    
+    Acessa o 'contadorId' global, incrementa em 1, e formata
+    o novo número como uma string de 3 dígitos
+    
+    Parâmetros:
+        Nenhum
+        
+    Retorno:
+        O novo código de tarefa formatado.
+    """
+
     global contadorId
     contadorId += 1 
     return str(contadorId).zfill(3)
 
 def verificarTarefa():
-    '''
-    Verificar Tarefa - A função vai identificar se o título está vazio 
-    e se é apenas letras
-    '''
+    """
+    Solicita e valida o título de uma nova tarefa 
+    A função entra em loop até que o usuário digite um título que:
+    1. Não esteja vazio (após remover espaços em branco).
+    2. Contenha apenas letras e espaços (sem números ou símbolos).
+    
+    Parâmetros:
+        Nenhum
+        
+    Retorno:
+        str: O título da tarefa validado.
+    """
+
     while True: 
         titulo = input("Digite a tarefa: ")
 
@@ -467,6 +627,20 @@ def verificarTarefa():
             pausar()
 
 def calcularTempo(dataInicioSTR, dataFinalSTR):
+    """
+    Calcula o tempo de execução entre duas datas
+    Recebe duas datas como strings, tenta convertê-las para
+    objetos datetime e calcula a diferença
+    
+    Parâmetros:
+        dataInicioSTR (str): A data/hora de início no formato "%d/%m/%Y %H:%M:%S"
+        dataFinalSTR (str): A data/hora de fim no formato "%d/%m/%Y %H:%M:%S"
+        
+    Retorno:
+        O tempo de execução formatado ou
+        "N/A" se as datas forem inválidas
+    """
+
     try:
         formato = "%d/%m/%Y %H:%M:%S"
         dataInicio = datetime.strptime(dataInicioSTR, formato)
@@ -490,20 +664,14 @@ def calcularTempo(dataInicioSTR, dataFinalSTR):
         return "N/A"
 
 
-'''
-    Main - Tudo o que o usuário pode ver 
-'''
-
 tarefas = carregar_dados(ARQUIVO_TAREFAS)
 tarefasArquivadas = carregar_dados(ARQUIVO_HISTORICO)
 contadorId = 0
 
 bibliotecaCodTarefas = tarefas + tarefasArquivadas
 
+#Verificar qual o maior código para a próxima tarefa ser +1
 if bibliotecaCodTarefas:
-    '''
-        Vai encontrar o maior código 
-    '''
     try:
         maiorId = int(max(bibliotecaCodTarefas, key=lambda x: int(x.get('Código', 0))).get('Código', 0))
         contadorId = maiorId
@@ -513,6 +681,7 @@ pausar()
 
 while True: 
     cabecalho()
+    #Lista de escolha do usuário
     print("1 - Cadastrar")
     print("2 - Visualizar tabela de tarefas")
     print("3 - Ver urgência de tarefa")
@@ -526,6 +695,7 @@ while True:
     escolha = input("\nEscolha o número do que deseja fazer: ")
     pausar()
 
+    #De acordo com a escolha, o match direciona para a função correta
     match escolha:
         case "1":
             cadastro()
