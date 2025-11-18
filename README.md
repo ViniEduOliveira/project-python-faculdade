@@ -1,5 +1,6 @@
 # 🚀 Gerenciador de Tarefas
 
+
 ![Status do Projeto](https://img.shields.io/badge/Status-Concluído-brightgreen)
 ![Tecnologia](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
 ![Tecnologia](https://img.shields.io/badge/JSON-000000?style=flat&logo=json&logoColor=white)
