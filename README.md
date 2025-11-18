@@ -55,7 +55,7 @@ O código foi estruturado seguindo os requisitos de boas práticas:
     * **2ª Defesa (Robustez Técnica):** Blocos `try/except` são usados para tratar erros de conversão de tipo (ex: usuário digita texto em vez de número no menu), evitando que o programa pare abruptamente.
 * **Documentação:** Todas as funções contêm *Docstrings* (`"""..."""`) explicando seu propósito, parâmetros e retorno.
 
-## 👨‍💻 Autor
+## 👨‍💻 Autores
 
 **Giulia Ayumi**
 **GitHub: giuayumii**
