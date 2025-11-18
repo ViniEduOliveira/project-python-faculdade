@@ -1,27 +1,23 @@
-<h1>Gerenciador de Tarefas Pessoal </h1>
+<h1 align="center">🚀 Gerenciador de Tarefas 🚀</h1>
 
-<h2>
-  Este projeto é uma aplicação de linha de comando em Python para o gerenciamento de tarefas pessoais.
+<p align="center"> <img alt="Status do Projeto" src="https://img.shields.io/badge/Status-Conclu%C3%ADdo-brightgreen?style=for-the-badge"> </p>
 
-  O sistema permite cadastrar, atualizar, concluir e excluir tarefas, salvando todos os dados de forma persistente em arquivos JSON.
-</h2>
-
-<h1>Funcionalidades</h1>
-
-<h2>Gestão de Tarefas:</h2> <h3>Cadastro de novas tarefas com título, descrição, prioridade e origem.</h3>
-
-<h2>Ciclo de Vida:</h2> <h3>Capacidade de iniciar uma tarefa (Ver Urgência), atualizar sua prioridade, marcá-la como concluída ou excluí-la (exclusão lógica).</h3>
-
-<h2>Persistência de Dados:</h2> <h3>O sistema salva todas as tarefas ativas em tarefas.json e move as tarefas concluídas (há mais de 7 dias) ou excluídas para um arquivo de histórico, tarefas_arquivadas.json.</h3>
+<p align="center"> Um script de console em Python para gerenciamento de produtividade pessoal.
 
 
-<h1>Relatórios Detalhados:</h1>
+O projeto permite criar, gerenciar e acompanhar tarefas por prioridade e status, com persistência de dados em arquivos JSON. </p>
 
-<h2>Tabela Principal:</h2> <h3>Lista todas as tarefas ativas, ordenadas por prioridade.</h3>
+✨ Funcionalidades Principais
+Criar, Atualizar e Concluir Tarefas: Gerencia o ciclo de vida completo de uma tarefa.
 
-<h2>Cálculo de Tempo:</h2> <h3>Calcula e exibe o tempo total de execução para tarefas já concluídas.</h3>
+Obter Próxima Tarefa: Seleciona automaticamente a tarefa pendente de maior prioridade.
 
-<h2>Tabela de Histórico:</h2> <h3>Mostra as tarefas arquivadas (sem incluir as excluídas).</h3>
+Persistência em JSON: Salva as tarefas ativas em tarefas.json ao sair e carrega ao iniciar.
 
-<h2>Garantia de ID Único:</h2> <h3>O sistema verifica ambos os arquivos (tarefas.json e tarefas_arquivadas.json) para garantir que o código de uma nova tarefa seja sempre único.</h3>
+Arquivamento Automático: Tarefas antigas ou excluídas são movidas para tarefas_arquivadas.json.
 
+Relatórios: Exibe listas de tarefas ativas (com tempo de execução) e tarefas arquivadas.
+
+Tratamento de Erros: Valida entradas e usa try/except para evitar que o programa pare inesperadamente.
+<br>
+<p> <img alt="Tag Python" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"> <img alt="Tag JSON" src="https://img.shields.io/badge/JSON-000000?style=for-the-badge&logo=json&logoColor=white"> <img alt="Tag CLI" src="https://img.shields.io/badge/CLI_Project-4D4D4D?style=for-the-badge"> <img alt="Tag Task Manager" src="https://img.shields.io/badge/Task_Manager-Blue?style=for-the-badge"> </p>
