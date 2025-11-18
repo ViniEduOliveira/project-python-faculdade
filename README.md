@@ -20,7 +20,7 @@ O sistema implementa um ciclo de vida completo para o gerenciamento de tarefas:
 ### 1. CRUD de Tarefas
 * **Criar Tarefas:** Adiciona uma nova tarefa à lista. Cada tarefa contém:
     * ID Único (gerado automaticamente)
-    * Título (obrigatório)
+    * Título 
     * Descrição
     * Prioridade (Urgente, alta, média, baixa)
     * Origem (E-mail, Telefone, Chamado do Sistema)
@@ -31,7 +31,6 @@ O sistema implementa um ciclo de vida completo para o gerenciamento de tarefas:
 * **Excluir Tarefas:** Realiza uma "exclusão lógica" alterando o status para "Excluída". O dado não é removido permanentemente.
 
 ### 2. Gerenciamento de Fluxo
-* **Verificação de Urgência:** O sistema permite ao usuário "pegar" a próxima tarefa. Ele busca a primeira tarefa com prioridade "Urgente"; se não houver, busca a da próxima prioridade. A tarefa selecionada tem seu status atualizado para "Fazendo".
 * **Arquivamento Automático:** Tarefas que foram "Concluídas" há mais de uma semana são automaticamente atualizadas para o status "Arquivado".
 
 ### 3. Relatórios
@@ -40,26 +39,9 @@ O sistema implementa um ciclo de vida completo para o gerenciamento de tarefas:
 
 ### 4. Persistência de Dados
 * **`tarefas.json`:** O sistema carrega todas as tarefas ativas deste arquivo ao iniciar e salva a lista atualizada ao sair.
-* **`tarefas_arquivadas.json`:** Tarefas com status "Arquivado" ou "Excluída" são movidas para este arquivo de histórico.
+* **`tarefasArquivadas.json`:** Tarefas com status "Arquivado" ou "Excluída" são movidas para este arquivo de histórico.
 * **Criação Automática:** Se os arquivos `.json` não existirem no início, o sistema os cria automaticamente com uma lista vazia `[]`.
 
-## ⚙️ Instalação e Execução
-
-Este projeto não requer bibliotecas externas.
-
-1.  Clone o repositório:
-    ```bash
-    git clone [URL-DO-SEU-REPOSITÓRIO]
-    ```
-2.  Navegue até o diretório do projeto:
-    ```bash
-    cd [NOME-DO-PROJETO]
-    ```
-3.  Execute o arquivo principal do Python:
-    ```bash
-    python nome_do_arquivo.py
-    ```
-4.  O menu principal será exibido e os arquivos `tarefas.json` e `tarefas_arquivadas.json` serão criados na pasta se não existirem.
 
 ## 🏗️ Estrutura e Boas Práticas
 
@@ -76,9 +58,11 @@ O código foi estruturado seguindo os requisitos de boas práticas:
 ## 👨‍💻 Autor
 
 **Giulia Ayumi**
+<br>
 **Vinicius Oliveira**
-
+<br>
 **giuayumii**
+<br>
 **ViniEduOliveira**
 
 
