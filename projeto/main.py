@@ -62,10 +62,12 @@ def cabecalho():
         Nenhum
     """
 
-    print()
     titulo = "Gerenciamento da Tarefa Pessoal"
+    autores = "Giulia Ayumi | Vinicius Oliveira"
+
     print("-" * LARGURA_TOTAL)
     print(f"{titulo.center(LARGURA_TOTAL, ' ')}")
+    print(f"{autores.center(LARGURA_TOTAL, ' ')}")
     print("-" * LARGURA_TOTAL)
 
 
@@ -295,6 +297,49 @@ def tabelaVisualizar():
     
     print("-" * LARGURA_TOTAL)
 
+def verificarUrgencia():
+    """
+    Verifica a tarefa pendente de maior prioridade
+    
+    Primeiro, checa se já existe alguma tarefa com status "FAZENDO"
+    Se não houver, procura a primeira tarefa "PENDENTE" seguindo a
+    ordem de prioridade (URGENTE > ALTA > MÉDIA > BAIXA)
+    
+    Se encontrar uma, atualiza seu status para "FAZENDO"
+    
+    Parâmetros:
+        Nenhum
+        
+    Retorno:
+        A tarefa que foi colocada em andamento (status atualizado)
+        Se nenhuma tarefa foi iniciada (ou por já ter uma "FAZENDO"
+              ou por não haver tarefas pendentes)
+    """
+
+    cabecalho()
+    print("Executando função - Verificar urgencia da tarefa\n")
+    if not tarefas:
+        print("Não há tarefas cadastradas")
+        return None
+    
+    for t in tarefas:
+        if t["Status"] == "FAZENDO":
+            print(f"Já existe uma tarefa em andamento: '{t['Titulo'].title()}' (cód: {t['Código']})\n")
+            return
+    
+    ordem_prioridade = ["URGENTE", "ALTA", "MÉDIA", "BAIXA"]
+    
+    for prioridade in ordem_prioridade:
+        for tarefa in tarefas:
+            if tarefa["Prioridade"] == prioridade and tarefa["Status"] == "PENDENTE":
+                tarefa["Status"] = "FAZENDO"
+                print(f"Tarefa '{tarefa['Titulo'].title()}' (cód: {tarefa['Código']}) agora está em andamento")
+                return tarefa
+    
+    else:
+        print("Não há tarefas pendentes")
+        return None
+
 def atualizar():
     """
     Permite o usuário selecionar uma tarefa pelo código e
@@ -343,49 +388,6 @@ def atualizar():
     else: 
         print("Tarefa não encontrada")
     
-def verificarUrgencia():
-    """
-    Verifica a tarefa pendente de maior prioridade
-    
-    Primeiro, checa se já existe alguma tarefa com status "FAZENDO"
-    Se não houver, procura a primeira tarefa "PENDENTE" seguindo a
-    ordem de prioridade (URGENTE > ALTA > MÉDIA > BAIXA)
-    
-    Se encontrar uma, atualiza seu status para "FAZENDO"
-    
-    Parâmetros:
-        Nenhum
-        
-    Retorno:
-        A tarefa que foi colocada em andamento (status atualizado)
-        Se nenhuma tarefa foi iniciada (ou por já ter uma "FAZENDO"
-              ou por não haver tarefas pendentes)
-    """
-
-    cabecalho()
-    print("Executando função - Verificar urgencia da tarefa\n")
-    if not tarefas:
-        print("Não há tarefas cadastradas")
-        return None
-    
-    for t in tarefas:
-        if t["Status"] == "FAZENDO":
-            print(f"Já existe uma tarefa em andamento: '{t['Titulo'].title()}' (cód: {t['Código']})\n")
-            return
-    
-    ordem_prioridade = ["URGENTE", "ALTA", "MÉDIA", "BAIXA"]
-    
-    for prioridade in ordem_prioridade:
-        for tarefa in tarefas:
-            if tarefa["Prioridade"] == prioridade and tarefa["Status"] == "PENDENTE":
-                tarefa["Status"] = "FAZENDO"
-                print(f"Tarefa '{tarefa['Titulo'].title()}' (cód: {tarefa['Código']}) agora está em andamento")
-                return tarefa
-    
-    else:
-        print("Não há tarefas pendentes")
-        return None
-
 def concluir():
     """
     Permite ao usuário selecionar uma tarefa pelo código
@@ -412,40 +414,6 @@ def concluir():
             tarefa["Status"] = 'CONCLUÍDA'
             print(f"Tarefa '{tarefa['Titulo'].title()}' concluída na data {tarefa['dataConclusao']}")
             return
-    else:
-        print("Tarefa não encontrada")
-
-def excluirTarefa():
-    """
-    Realiza a "exclusão lógica" de uma tarefa
-    
-    A função encontra a tarefa pelo código e altera seu status
-    para "EXCLUÍDA". A tarefa não é removida da lista 'tarefas'
-    imediatamente, ela será movida para o histórico pela função 'arquivamento'.
-    
-    Parâmetros:
-        Nenhum
-        
-    Retorno:
-        Nenhum
-    """
-
-    print("Executando função - Excluir tarefa\n")
-    global tarefas
-
-    tarefaExcluir = input("Digite o código da tarefa que deseja excluir: ")
-    encontrou = False
-
-    for tarefa in tarefas:
-        if tarefa['Código'] == tarefaExcluir:
-            tarefa["Status"] = "EXCLUÍDA"
-            print(f"Tarefa '{tarefa['Titulo'].title()}' marcada como 'EXCLUÍDA'.")
-            print("Ela será movida para o arquivo morto na próxima limpeza.")
-            encontrou = True
-            break
-    
-    if encontrou:
-        salvar_dados(ARQUIVO_TAREFAS, tarefas)
     else:
         print("Tarefa não encontrada")
 
@@ -572,6 +540,39 @@ def relatorioArquivamento():
     
     print("-" * LARGURA_TOTAL)
 
+def excluirTarefa():
+    """
+    Realiza a "exclusão lógica" de uma tarefa
+    
+    A função encontra a tarefa pelo código e altera seu status
+    para "EXCLUÍDA". A tarefa não é removida da lista 'tarefas'
+    imediatamente, ela será movida para o histórico pela função 'arquivamento'.
+    
+    Parâmetros:
+        Nenhum
+        
+    Retorno:
+        Nenhum
+    """
+
+    print("Executando função - Excluir tarefa\n")
+    global tarefas
+
+    tarefaExcluir = input("Digite o código da tarefa que deseja excluir: ")
+    encontrou = False
+
+    for tarefa in tarefas:
+        if tarefa['Código'] == tarefaExcluir:
+            tarefa["Status"] = "EXCLUÍDA"
+            print(f"Tarefa '{tarefa['Titulo'].title()}' marcada como 'EXCLUÍDA'.")
+            print("Ela será movida para o arquivo morto na próxima limpeza.")
+            encontrou = True
+            break
+    
+    if encontrou:
+        salvar_dados(ARQUIVO_TAREFAS, tarefas)
+    else:
+        print("Tarefa não encontrada")
 
 
 
