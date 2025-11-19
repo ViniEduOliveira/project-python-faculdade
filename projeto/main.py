@@ -202,7 +202,7 @@ def cadastro():
             print(e)
             pausar()
             continue
-    os.system('cls')
+    pausar()
 
     data = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print(f"Data de criação: {data}")
